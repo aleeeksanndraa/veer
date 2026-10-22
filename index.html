@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>VEER Reformer Studio</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="VEER, reformer pilates in Amsterdam Oost. Eight reformers, 45 minutes, English or Dutch.">
@@ -331,7 +336,33 @@ html,body,.sheet,.tt,.note,.day,.price,.price.hl,.chip,.btn.ink,.row,.cls,.step,
   .row::before{transform:none}.tick path{stroke-dashoffset:0}
   .statement .w{opacity:1}
 }
+
+/* ---------- intro ---------- */
+.intro{position:fixed;inset:0;z-index:100;background:var(--paper);color:var(--ink);display:grid;place-items:center;
+  transition:transform 1.3s cubic-bezier(.76,0,.24,1),border-radius 1.3s cubic-bezier(.76,0,.24,1)}
+.intro.out{transform:translateY(-102%);border-radius:0 0 50% 50%/0 0 14vh 14vh}
+.intro-in{display:grid;justify-items:center;gap:22px}
+.intro-word{display:flex;overflow:hidden;padding-block:.08em;font:200 clamp(64px,11vw,150px)/.9 var(--display);letter-spacing:-.03em}
+.intro-word span{display:inline-block;transform:translateY(105%);transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.intro.go .intro-word span{transform:none}
+.intro-word span:nth-child(2){transition-delay:.08s}.intro-word span:nth-child(3){transition-delay:.16s}.intro-word span:nth-child(4){transition-delay:.24s}
+.intro-line{width:min(220px,50vw);height:1px;background:rgba(30,28,25,.15);position:relative;overflow:hidden}
+.intro-line i{position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:0 50%;transition:transform 1.6s .35s cubic-bezier(.65,0,.35,1)}
+.intro.go .intro-line i{transform:none}
+.intro-cap{font:400 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:0;transition:opacity .9s .7s}
+.intro.go .intro-cap{opacity:.6}
+.intro.out .intro-in{opacity:0;transform:translateY(-40px);transition:opacity .6s,transform 1.1s cubic-bezier(.76,0,.24,1)}
+@media (prefers-reduced-motion:reduce){.intro{display:none}}
 </style>
+</head>
+<body>
+
+
+<div class="intro" id="intro" aria-hidden="true"><div class="intro-in">
+  <div class="intro-word"><span>v</span><span>e</span><span>e</span><span>r</span></div>
+  <div class="intro-line"><i></i></div>
+  <div class="intro-cap">Reformer pilates · Amsterdam Oost</div>
+</div></div>
 
 <div class="sheet">
   <!-- HERO -->
@@ -571,7 +602,15 @@ $$('.ph img').forEach(im=>{
   im.addEventListener('load',ok);
   im.addEventListener('error',()=>im.remove());
 });
-requestAnimationFrame(()=>document.documentElement.classList.add('ready'));
+/* ---------- intro: once per visit, then the hero plays ---------- */
+(()=>{const intro=$('#intro'),ready=()=>document.documentElement.classList.add('ready');
+  let seen=false;try{seen=sessionStorage.getItem('veer-intro')==='1';sessionStorage.setItem('veer-intro','1')}catch(e){}
+  if(!intro||seen||reduce){intro&&intro.remove();requestAnimationFrame(ready);return}
+  document.documentElement.style.overflow='hidden';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>intro.classList.add('go')));
+  setTimeout(()=>{intro.classList.add('out');document.documentElement.style.overflow='';setTimeout(ready,350)},2300);
+  setTimeout(()=>intro.remove(),3800);
+})();
 
 /* ---------- i18n (Dutch is a draft, needs a native check) ---------- */
 const NL={nav1:'Rooster',nav2:'Eerste les',nav3:'Docenten',nav4:'Prijzen',book:'Boek een les',book2:'Lessen van vandaag',book3:'Boek een les',
@@ -705,3 +744,6 @@ let saved='en';try{saved=localStorage.getItem('veer-lang')||'en'}catch(e){}
 setLang(saved==='nl'?'nl':'en');
 })();
 </script>
+
+</body>
+</html>

@@ -210,7 +210,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 /* ---------- instructors ---------- */
 .team{padding-block:clamp(70px,10vw,140px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:var(--gut)}
 .team-photo{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start}
-.team-photo .frame{position:relative;aspect-ratio:4/5;border-radius:var(--r-m);overflow:hidden}
+.team{position:relative}
+.tring{position:absolute;z-index:0;pointer-events:none;width:150%;aspect-ratio:1;left:50%;top:52%;margin:-75% 0 0 -75%;opacity:0;transform:translateX(-30%) scale(.9);transition:transform 1.8s cubic-bezier(.16,.8,.2,1),opacity 1.4s}
+.tring.in{opacity:1;transform:none}
+.tring-m{display:none}
+.tring i{position:absolute;inset:0;border:1px solid currentColor;border-radius:50%;opacity:.28;animation:spin 60s linear infinite}
+.tring i+i{inset:16%;opacity:.18;animation-direction:reverse;animation-duration:80s}
+.tring i::before,.tring i::after{content:"";position:absolute;left:50%;border-radius:50%;background:currentColor}
+.tring i::before{top:-4px;width:8px;height:8px;margin-left:-4px}
+.tring i::after{bottom:-2.5px;width:5px;height:5px;margin-left:-2.5px}
+.team-photo .frame{position:relative;z-index:1;aspect-ratio:4/5;border-radius:var(--r-m);overflow:hidden}
 .team-photo .ph{position:absolute;inset:0;opacity:0;transition:opacity .6s}
 .team-photo .ph.on{opacity:1}
 .team-list{display:grid}
@@ -321,6 +330,9 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
   .cls .btn{grid-row:1/3;grid-column:3}
   .team{grid-template-columns:1fr}
   .team-photo{display:none}
+  .team{overflow:clip}
+  .tring-m{display:block;width:min(560px,120vw);left:auto;right:-38%;top:-4%;margin:0}
+  .team-list{position:relative;z-index:1}
   .person{min-height:0;opacity:1;padding-block:28px;border-top:1px solid var(--line)}
   .person .ph{display:block;aspect-ratio:4/5;border-radius:var(--r-m);max-width:420px}
   .visit-grid{grid-template-columns:1fr 1fr}
@@ -489,12 +501,14 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
   <section class="team wrap" id="team" aria-labelledby="tm-h" data-tone="dusk">
     <div class="team-photo" aria-hidden="true">
       <p class="label muted" id="tm-h" data-i="team" style="margin:0 0 14px">The teachers</p>
+      <span class="tring" aria-hidden="true"><i></i><i></i></span>
       <div class="frame">
         <div class="ph on" data-l="07"><img src="img/07-instructor-a.jpg" alt=""></div>
         <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" alt=""></div>
         <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" alt=""></div>
       </div>
     </div>
+    <span class="tring tring-m" aria-hidden="true"><i></i><i></i></span>
     <div class="team-list">
       <article class="person on" data-k="0">
         <div class="ph" data-l="07"><img src="img/07-instructor-a.jpg" alt="Portrait of Noor"></div>
@@ -751,7 +765,7 @@ if(!reduce&&window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger
 
 /* ---------- reveal rows, rules, footer word ---------- */
 const revIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revIO.unobserve(e.target)}}),{rootMargin:'0px 0px -18% 0px'});
-$$('.row, .note').forEach(el=>revIO.observe(el));
+$$('.row, .note, .tring').forEach(el=>revIO.observe(el));
 
 /* ---------- first visit: the carriage rolls through the steps ---------- */
 (()=>{const g=$('#vgrid');if(!g)return;const steps=$$('#vgrid .step');let raf=0;

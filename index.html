@@ -170,9 +170,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 .row h3 .n{display:block;font:400 11px var(--sans);letter-spacing:.1em;margin-bottom:12px;opacity:.55}
 .row .ph img{transition:transform 1.6s cubic-bezier(.25,.6,.3,1)}
 @media (hover:hover) and (min-width:641px){
-  .row:hover .ph img{transform:scale(1.04)}
+  .rows{isolation:isolate}
+  .row::after{content:"";position:absolute;z-index:-1;inset:0 -18px;border-radius:var(--r-s);background:var(--paper);opacity:0;transform:scaleY(.96);transition:opacity .8s ease,transform 1s cubic-bezier(.25,.6,.3,1)}
+  .row:hover::after{opacity:.65;transform:none}
+  .rows:hover .row{opacity:.55}
+  .rows .row:hover{opacity:1}
+  .row{transition:opacity .8s ease}
+  .row .ph{transition:transform 1.2s cubic-bezier(.25,.6,.3,1),border-radius 1.2s}
+  .row:hover .ph{transform:rotate(-2deg) scale(1.03);border-radius:var(--r-m)}
+  .row:hover .ph img{transform:scale(1.1)}
   .row h3 span.t{display:inline-block;transition:transform 1s cubic-bezier(.25,.6,.3,1)}
-  .row:hover h3 span.t{transform:translateX(6px)}
+  .row:hover h3 span.t{transform:translateX(12px)}
+  .row h3 .n{transition:opacity .8s,letter-spacing 1s cubic-bezier(.25,.6,.3,1)}
+  .row:hover h3 .n{opacity:1;letter-spacing:.3em}
 }
 .row:last-child{border-bottom:1px solid var(--line)}
 .row h3{margin:0;font:500 clamp(20px,2vw,28px)/1.02 var(--sans);letter-spacing:-.02em;text-transform:uppercase}

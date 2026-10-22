@@ -209,7 +209,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- instructors ---------- */
 .team{padding-block:clamp(70px,10vw,140px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:var(--gut)}
-.team-photo{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start}
+.team-photo{position:sticky;top:0;height:100svh;align-self:start;display:grid;align-content:center}
 .team{position:relative}
 .tring{position:absolute;z-index:0;pointer-events:none;width:min(46vw,720px);aspect-ratio:1;right:calc(min(46vw,720px)*-.42);top:clamp(60px,9vw,130px);opacity:0;transform:translateX(30%) scale(.9);transition:transform 1.8s cubic-bezier(.16,.8,.2,1),opacity 1.4s}
 .tring.in{opacity:1;transform:none}
@@ -220,10 +220,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tring i::before,.tring i::after{content:"";position:absolute;left:50%;border-radius:50%;background:currentColor}
 .tring i::before{top:-4px;width:8px;height:8px;margin-left:-4px}
 .tring i::after{bottom:-2.5px;width:5px;height:5px;margin-left:-2.5px}
-.team-photo .frame{position:relative;z-index:1;aspect-ratio:4/5;border-radius:var(--r-m);overflow:hidden}
+.team-photo .frame{position:relative;z-index:1;aspect-ratio:4/5;width:min(100%,calc(72svh*.8));border-radius:var(--r-m);overflow:hidden}
 .team-photo .ph{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
 .team-photo .ph.on{opacity:1}
-.tmeta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:20px}
+.tmeta{width:min(100%,calc(72svh*.8));display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:20px}
 .tcount{font:200 clamp(28px,2.6vw,40px)/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .tcount b{font-weight:300;display:inline-block;min-width:1.2em}
 .tcount span{opacity:.45}
@@ -231,7 +231,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tbar i{flex:1;height:2px;border-radius:2px;background:currentColor;opacity:.2;transition:opacity .5s}
 .tbar i.on{opacity:1}
 .team-list{display:grid}
-.person{min-height:70vh;display:grid;align-content:center;gap:16px;opacity:.22;transition:opacity .5s}
+.person{min-height:100svh;display:grid;align-content:center;gap:16px;opacity:.22;transition:opacity .5s}
 .person.on{opacity:1}
 .person h3{margin:0;font:500 clamp(48px,7vw,112px)/.86 var(--sans);letter-spacing:-.05em;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
 .person:not(.on) h3{transform:translateX(-18px)}
@@ -762,7 +762,7 @@ addEventListener('scroll',litUpdate,{passive:true});
 const pics=$$('.team-photo .ph');
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const k=+e.target.dataset.k;
   $$('.person').forEach(p=>p.classList.toggle('on',p===e.target));pics.forEach((p,i)=>p.classList.toggle('on',i===k));
-  $('#tnum').textContent='0'+(k+1);$$('.tbar i').forEach((b,i)=>b.classList.toggle('on',i<=k))}}),{rootMargin:'-45% 0px -45% 0px'});
+  $('#tnum').textContent='0'+(k+1);$$('.tbar i').forEach((b,i)=>b.classList.toggle('on',i<=k))}}),{rootMargin:'-49.5% 0px -49.5% 0px'});
 $$('.person').forEach(p=>io.observe(p));
 
 /* ---------- smooth scroll + studio strip grows ---------- */
@@ -797,7 +797,7 @@ $$('.row, .note, .tring').forEach(el=>revIO.observe(el));
 
 /* ---------- tone on scroll ---------- */
 const toneIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const t=e.target.dataset.tone;
-  if(t==='milk')delete document.documentElement.dataset.tone;else document.documentElement.dataset.tone=t}}),{rootMargin:'-50% 0px -50% 0px'});
+  if(t==='milk')delete document.documentElement.dataset.tone;else document.documentElement.dataset.tone=t}}),{rootMargin:'-49.5% 0px -49.5% 0px'});
 $$('[data-tone]').forEach(s=>toneIO.observe(s));
 
 let saved='en';try{saved=localStorage.getItem('veer-lang')||'en'}catch(e){}

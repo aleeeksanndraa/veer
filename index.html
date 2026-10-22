@@ -1,0 +1,707 @@
+<title>VEER Reformer Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="VEER, reformer pilates in Amsterdam Oost. Eight reformers, 45 minutes, English or Dutch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300&family=Geist:wght@400;500;600&display=swap">
+<style>
+/* Layout: one rounded stone sheet inside a taupe frame (refs: PLIE, nirva). Thin geometric display for the brand voice,
+   tight grotesk for structure (ref: studio scroll video). One idea per screen, hairlines, photos carry the warmth. */
+:root{
+  --frame:#CFC7BB;      /* outer taupe frame */
+  --sheet:#EEEBE5;      /* page sheet, warm stone */
+  --paper:#F6F3EE;      /* note card / panels */
+  --ink:#1E1C19;
+  --muted:#7C7469;
+  --line:rgba(30,28,25,.14);
+  --sand:#B9A991;       /* the one warm accent: spots bar, active states */
+  --onphoto:#FBF8F3;
+  --display:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  --sans:"Geist","Helvetica Neue",Arial,system-ui,sans-serif;
+  --r:28px;      /* outer sheets */
+  --r-l:18px;    /* hero inside a sheet: 28 minus the 10px gap */
+  --r-m:14px;    /* large photos, panels */
+  --r-s:10px;    /* small photos, inputs */
+  --gut:clamp(16px,3.2vw,44px);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{background:var(--frame)}
+body{background:var(--frame);color:var(--ink);font:400 15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-block:10px}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px}
+.sheet{background:var(--sheet);border-radius:var(--r);overflow:clip}
+.wrap{padding-inline:var(--gut)}
+.label{font:500 11px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.ph{position:relative;background:linear-gradient(160deg,#B9AE9F,#8E8374 70%,#6F665B);overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph[data-l]::after{content:attr(data-l);position:absolute;left:12px;bottom:10px;font:500 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:rgba(251,248,243,.7)}
+.ph.loaded::after{display:none}
+
+/* ---------- hero ---------- */
+.hero{position:relative;margin:10px;border-radius:var(--r-l);height:min(100svh - 40px,880px);min-height:560px;color:var(--onphoto);overflow:hidden}
+.hero .ph{position:absolute;inset:0}
+.hero .ph::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(28,22,16,.5),rgba(28,22,16,.08) 42%,rgba(28,22,16,.1) 62%,rgba(28,22,16,.5)),linear-gradient(90deg,rgba(28,22,16,.28),rgba(28,22,16,0) 40%,rgba(28,22,16,0) 65%,rgba(28,22,16,.28))}
+.hero .ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media (prefers-reduced-motion:reduce){.hero .ph video{display:none}}
+.hero .ph img{transform:scale(1.06);transition:transform 2.4s cubic-bezier(.2,.7,.2,1)}
+.ready .hero .ph img{transform:scale(1)}
+.rings{position:absolute;inset:0;z-index:2;pointer-events:none}
+.ring{position:absolute;width:62%;aspect-ratio:1;top:4%;opacity:0;transition:transform 1.8s cubic-bezier(.16,.8,.2,1) .2s,opacity 1.4s .2s}
+.ring.l{left:-14%;transform:translateX(-45%)}
+.ring.r{right:-14%;transform:translateX(45%)}
+.ready .ring{opacity:1;transform:none}
+.ring i{position:absolute;inset:0;border:1px solid rgba(251,248,243,.3);border-radius:50%;animation:spin 60s linear infinite}
+.ring.r i{animation-direction:reverse;animation-duration:75s}
+.ring i::before,.ring i::after{content:"";position:absolute;left:50%;border-radius:50%;background:var(--onphoto)}
+.ring i::before{top:-4px;width:8px;height:8px;margin-left:-4px}
+.ring i::after{bottom:-2.5px;width:5px;height:5px;margin-left:-2.5px;opacity:.7}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rings b{animation:twinkle 4s ease-in-out infinite}
+.rings b:nth-of-type(2){animation-delay:2s}
+@keyframes twinkle{50%{transform:scale(.55) rotate(45deg);opacity:.6}}
+.rings b{position:absolute;width:14px;height:14px;background:var(--onphoto);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
+.rings b:nth-of-type(1){left:23.5%;top:47%}.rings b:nth-of-type(2){right:23.5%;top:47%}
+.nav{position:relative;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px;padding:12px}
+.nav .mark{margin-left:calc(clamp(16px,2.4vw,30px) - 12px)}
+.mark{display:inline-flex;justify-self:start;overflow:hidden;padding-block:4px;font:300 24px/1 var(--display);letter-spacing:.02em;text-decoration:none}
+.mark span{display:inline-block;transform:translateY(110%);transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.ready .mark span{transform:none}
+.mark span:nth-child(2){transition-delay:.07s}.mark span:nth-child(3){transition-delay:.14s}.mark span:nth-child(4){transition-delay:.21s}
+.mark:hover span{animation:boing .7s cubic-bezier(.3,1.6,.5,1) both}
+.mark:hover span:nth-child(2){animation-delay:.05s}.mark:hover span:nth-child(3){animation-delay:.1s}.mark:hover span:nth-child(4){animation-delay:.15s}
+@keyframes boing{0%{transform:none}35%{transform:translateY(-28%) scaleY(1.1)}70%{transform:translateY(6%) scaleY(.94)}100%{transform:none}}
+.pill{display:flex;gap:4px;padding:5px;border-radius:99px;background:rgba(251,248,243,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(251,248,243,.22)}
+.pill a{font:500 11.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;text-decoration:none;padding:9px 16px;border-radius:99px;transition:background .3s}
+.pill a:hover{background:rgba(251,248,243,.18)}
+.nav-r{justify-self:end;display:flex;gap:10px;align-items:center}
+.lang{display:flex;border:1px solid rgba(251,248,243,.35);border-radius:99px;padding:3px}
+.lang button{background:none;border:0;font:500 11px var(--sans);letter-spacing:.06em;padding:6px 10px;border-radius:99px;color:inherit}
+.lang button[aria-pressed="true"]{background:var(--onphoto);color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:10px;border-radius:99px;padding:13px 22px;font:500 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;text-decoration:none;border:1px solid currentColor;background:none;transition:background .3s,color .3s}
+.btn.solid{background:var(--onphoto);color:var(--ink);border-color:var(--onphoto)}
+.btn.ink{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn:hover{transform:translateY(-1px)}
+.menu-btn{display:none}
+.hero-top{position:absolute;z-index:3;left:clamp(16px,2.4vw,30px);right:clamp(16px,2.4vw,30px);top:clamp(92px,11vh,120px);display:flex;justify-content:space-between;align-items:start;gap:24px;pointer-events:none}
+.hero-top .lead{margin:0;font:300 clamp(17px,1.45vw,21px)/1.3 var(--display);max-width:24ch}
+.gloss{margin:0;text-align:right;font:400 11px/1.6 var(--sans);letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+.gloss em{font:300 italic 15px var(--display);letter-spacing:0;text-transform:none}
+.hero-mid{position:absolute;z-index:4;left:50%;bottom:calc(clamp(120px,31vw,520px)*.42 + 22px);transform:translateX(-50%);display:grid;justify-items:center;gap:16px;text-align:center;width:min(90%,420px)}
+.hero-mid p{margin:0;font:300 clamp(22px,2.2vw,32px)/1.15 var(--display);letter-spacing:-.01em}
+.hero-mid .btn{padding:15px 28px}
+.next{display:flex;gap:10px;align-items:center;font:500 11px var(--sans);letter-spacing:.07em;text-transform:uppercase}
+.next i{width:7px;height:7px;border-radius:50%;background:#C8E0A8;box-shadow:0 0 0 4px rgba(200,224,168,.25)}
+.word{position:absolute;z-index:3;left:0;right:0;bottom:-.19em;text-align:center;font:200 clamp(120px,31vw,520px)/.8 var(--display);letter-spacing:-.04em;white-space:nowrap}
+.word i{display:inline-block;font-style:normal;transform-origin:50% 100%;will-change:transform}
+.word span{display:inline-block;transform:translateY(40%);opacity:0;transition:transform 1.4s cubic-bezier(.2,.7,.2,1),opacity 1.4s}
+.ready .word span{transform:none;opacity:1}
+.word span:nth-child(2){transition-delay:.08s}.word span:nth-child(3){transition-delay:.16s}.word span:nth-child(4){transition-delay:.24s}
+
+/* ---------- statement ---------- */
+.statement{padding-block:clamp(90px,14vw,190px)}
+.statement p{margin:0 auto;max-width:21ch;text-align:center;font:500 clamp(28px,3.9vw,58px)/1.06 var(--sans);letter-spacing:-.035em;text-wrap:balance}
+.statement .w{opacity:.26;transition:opacity .25s}
+.statement .w.on{opacity:1}
+.statement .side{display:flex;justify-content:space-between;margin-top:48px}
+
+/* ---------- the studio strip ---------- */
+.studio{padding-bottom:clamp(60px,9vw,120px)}
+.studio h2{margin:0;font:500 clamp(64px,12vw,200px)/.86 var(--sans);letter-spacing:-.055em}
+.strip{display:flex;gap:10px;margin-top:18px;align-items:flex-end}
+.strip .ph{flex:1;height:clamp(110px,15vw,240px);border-radius:var(--r-s);transition:height .1s linear}
+.strip .ph:nth-child(2){flex:1.5}.strip .ph:nth-child(4){flex:1.3}
+.studio .cap{display:grid;grid-template-columns:1fr 1fr;gap:var(--gut);margin-top:22px}
+.studio .cap p{margin:0;max-width:44ch}
+
+/* ---------- about collage ---------- */
+.about{padding-block:clamp(70px,10vw,140px);display:grid;place-items:center}
+.cards{position:relative;width:min(980px,100%);display:grid;grid-template-columns:1fr 1.05fr 1fr;align-items:center}
+.cards>*{border-radius:var(--r-m);box-shadow:0 30px 60px -30px rgba(30,28,25,.35)}
+.cards .ph{aspect-ratio:4/5}
+.c1{transform:rotate(-6deg) translateX(14%)}
+.c3{transform:rotate(5deg) translateX(-14%)}
+.note{position:relative;z-index:2;background:var(--paper);border-radius:var(--r-s)!important;padding:clamp(22px,3vw,38px);aspect-ratio:4/5.3;display:flex;flex-direction:column;gap:12px;transform:rotate(1deg);
+  background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(30,28,25,.05) 27px 28px)}
+.note h3{margin:0 0 4px;font:300 italic clamp(26px,2.6vw,36px)/1 var(--display)}
+.note p{margin:0;font-size:13.5px;line-height:1.45}
+.note .sign{margin-top:auto;font:300 italic 20px var(--display);text-align:right}
+.cards .ph{z-index:1;transition:box-shadow .5s,z-index 0s .25s}
+.cards .ph img{transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.cards .ph:hover{z-index:3;box-shadow:0 40px 80px -30px rgba(30,28,25,.55);transition:box-shadow .5s,z-index 0s}
+.cards .ph:hover img{transform:scale(1.07)}
+.note p{display:grid;grid-template-columns:18px 1fr;gap:10px;align-items:start;cursor:default;opacity:0;transform:translateY(10px);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+.note.in p{opacity:1;transform:none}
+.note.in p:nth-of-type(2){transition-delay:.25s}.note.in p:nth-of-type(3){transition-delay:.5s}.note.in p:nth-of-type(4){transition-delay:.75s}
+.tick{width:18px;height:18px;margin-top:-1px}
+.tick circle{fill:none;stroke:currentColor;stroke-width:1.2;opacity:.45}
+.tick path{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:14;stroke-dashoffset:14;transition:stroke-dashoffset .5s .35s ease}
+.note.in .tick path{stroke-dashoffset:0}
+.note.in p:nth-of-type(2) .tick path{transition-delay:.6s}.note.in p:nth-of-type(3) .tick path{transition-delay:.85s}.note.in p:nth-of-type(4) .tick path{transition-delay:1.1s}
+.note p:hover .tick circle{fill:var(--ink);opacity:1}
+.note p:hover .tick path{stroke:var(--paper)}
+.note .tape{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.note:hover .tape{transform:translateX(-50%) rotate(3deg) translateY(-3px)}
+.tape{position:absolute;top:-12px;left:50%;width:96px;height:26px;transform:translateX(-50%) rotate(-3deg);background:rgba(207,199,187,.75)}
+
+/* ---------- rows ---------- */
+.rows{padding-bottom:clamp(70px,10vw,140px)}
+.row{position:relative;display:grid;grid-template-columns:1.1fr 1fr 150px;gap:var(--gut);align-items:start;padding-block:20px;transition:grid-template-columns .7s cubic-bezier(.2,.8,.2,1),padding .7s cubic-bezier(.2,.8,.2,1)}
+.row::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--line);transform:scaleX(0);transform-origin:0 50%;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.row.in::before{transform:none}
+.row h3,.row p{opacity:0;transform:translateY(16px);transition:opacity .9s .2s,transform .9s .2s cubic-bezier(.2,.8,.2,1)}
+.row p{transition-delay:.32s}
+.row.in h3,.row.in p{opacity:1;transform:none}
+.row h3 .n{display:block;font:400 11px var(--sans);letter-spacing:.1em;margin-bottom:12px;opacity:.55}
+.row .ph img{transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+@media (hover:hover) and (min-width:641px){
+  .row:hover{grid-template-columns:1.1fr 1fr 280px;padding-block:28px}
+  .row:hover .ph img{transform:scale(1.08)}
+  .row h3 span.t{display:inline-block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+  .row:hover h3 span.t{transform:translateX(14px)}
+}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row h3{margin:0;font:500 clamp(20px,2vw,28px)/1.02 var(--sans);letter-spacing:-.02em;text-transform:uppercase}
+.row p{margin:0;max-width:40ch}
+.row .ph{aspect-ratio:1;border-radius:var(--r-s)}
+
+/* ---------- timetable ---------- */
+.tt{background:var(--paper);margin:10px 0;border-radius:var(--r);padding-block:clamp(50px,7vw,90px)}
+.tt-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:32px}
+.tt-head h2{margin:0;font:200 clamp(56px,8vw,128px)/.85 var(--display);letter-spacing:-.04em}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r-m);overflow:hidden}
+.day{background:none;border:0;border-right:1px solid var(--line);padding:14px 4px;text-align:left;padding-left:12px;display:grid;gap:2px}
+.day:last-child{border-right:0}
+.day b{font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.day span{font:200 30px/1 var(--display)}
+.day[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 8px}
+.chip{border:1px solid var(--line);background:none;border-radius:99px;padding:8px 14px;font:500 11.5px var(--sans);letter-spacing:.04em}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.classes{display:grid}
+.cls{display:grid;grid-template-columns:90px 1.4fr 1fr 70px 170px 150px;gap:16px;align-items:center;padding-block:18px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.cls .t{font:300 26px/1 var(--display)}
+.cls .n{font:500 17px/1.1 var(--sans);letter-spacing:-.01em}
+.cls .n small{display:block;font:400 12.5px var(--sans);color:var(--muted);letter-spacing:0;margin-top:3px}
+.tag{justify-self:start;border:1px solid var(--line);border-radius:99px;padding:3px 9px;font:500 10.5px var(--sans);letter-spacing:.06em}
+.spots{display:grid;gap:6px;font-size:12px}
+.bar{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.bar i{height:5px;border-radius:2px;background:var(--line)}
+.bar i.f{background:var(--sand)}
+.cls .btn{justify-self:end;padding:10px 16px;font-size:11px}
+.cls.full .btn{border-style:dashed}
+.empty{padding:40px 0;color:var(--muted)}
+
+/* ---------- instructors ---------- */
+.team{padding-block:clamp(70px,10vw,140px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:var(--gut)}
+.team-photo{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start}
+.team-photo .frame{position:relative;aspect-ratio:4/5;border-radius:var(--r-m);overflow:hidden}
+.team-photo .ph{position:absolute;inset:0;opacity:0;transition:opacity .6s}
+.team-photo .ph.on{opacity:1}
+.team-list{display:grid}
+.person{min-height:70vh;display:grid;align-content:center;gap:16px;opacity:.22;transition:opacity .5s}
+.person.on{opacity:1}
+.person h3{margin:0;font:500 clamp(48px,7vw,112px)/.86 var(--sans);letter-spacing:-.05em}
+.person p{margin:0;max-width:40ch}
+.person .ph{display:none}
+
+/* ---------- first visit ---------- */
+.visit{padding-block:clamp(70px,10vw,140px);border-top:1px solid var(--line)}
+.visit-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gut);margin-top:40px}
+.step{display:grid;gap:10px;align-content:start;border-top:1px solid var(--ink);padding-top:14px}
+.step b{font:200 54px/1 var(--display)}
+.step h4{margin:0;font:500 17px var(--sans);letter-spacing:-.01em}
+.step p{margin:0;font-size:14px}
+.h2{margin:0;font:500 clamp(40px,5.6vw,86px)/.9 var(--sans);letter-spacing:-.045em;max-width:14ch}
+
+/* ---------- prices ---------- */
+.prices{padding-bottom:clamp(70px,10vw,140px)}
+.price-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);margin-top:40px}
+.price{padding:22px 20px 26px 0;display:grid;gap:10px;align-content:start;border-right:1px solid var(--line);padding-left:20px}
+.price:first-child{padding-left:0}.price:last-child{border-right:0}
+.price .amt{font:200 clamp(52px,5vw,78px)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.price h4{margin:0;font:500 15px var(--sans)}
+.price p{margin:0;font-size:13.5px;color:var(--muted)}
+.price.hl{background:var(--ink);color:var(--paper);padding-left:20px;border-radius:var(--r-m)}
+.price.hl p{color:#BDB5AA}
+.faq{display:grid;grid-template-columns:1fr 1.4fr;gap:var(--gut);margin-top:clamp(60px,8vw,110px)}
+details{border-top:1px solid var(--line);padding-block:16px}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;font:500 16px var(--sans)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:200 24px/1 var(--display)}
+details[open] summary::after{content:"\2212"}
+details p{margin:10px 0 0;max-width:56ch}
+
+/* ---------- footer ---------- */
+.foot{position:relative;margin:10px 0 0;border-radius:var(--r);color:var(--onphoto);overflow:hidden;min-height:620px;display:flex;flex-direction:column}
+.foot .ph{position:absolute;inset:0}
+.foot .ph::before{content:"";position:absolute;inset:0;z-index:1;background:rgba(20,18,15,.38)}
+.foot-in{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;align-items:start;gap:24px;padding:clamp(24px,3vw,40px)}
+.foot-in p{margin:6px 0 0;font-size:14px}
+.foot-btn{justify-content:center;padding:18px 34px;font-size:13px;white-space:nowrap}
+.foot .word{position:relative;inset:auto;margin-top:auto;bottom:auto;transform:translateY(19%)}
+.foot .word span{transform:translateY(55%);opacity:0;transition:transform 1.4s cubic-bezier(.2,.8,.2,1),opacity 1.2s}
+.foot .word.in span{transform:none;opacity:1}
+.foot .word{pointer-events:auto;cursor:default}
+.foot .word i{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+.foot .word span:hover i{animation:boing .8s cubic-bezier(.3,1.6,.5,1) both}
+.disc{position:relative;z-index:2;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:0 clamp(24px,3vw,40px);font-size:11.5px;letter-spacing:.04em;opacity:.8}
+
+/* ---------- booking sheet ---------- */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(30,28,25,.35);opacity:0;pointer-events:none;transition:opacity .35s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet-panel{position:fixed;z-index:41;top:10px;right:max(10px,env(safe-area-inset-right,0px));bottom:10px;width:min(440px,calc(100% - 20px));background:var(--paper);border-radius:22px;
+  padding:28px;transform:translateX(110%);transition:transform .55s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;gap:18px;overflow:auto}
+.sheet-panel.on{transform:none}
+.sheet-panel h3{margin:0;font:200 46px/.9 var(--display);letter-spacing:-.03em}
+.sum{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;border-block:1px solid var(--line);padding-block:14px}
+.sum dt{color:var(--muted)}.sum dd{margin:0}
+.f{display:grid;gap:6px}
+.f label{font:500 11px var(--sans);letter-spacing:.08em;text-transform:uppercase}
+.f input,.f select{font:inherit;border:1px solid var(--line);background:var(--sheet);border-radius:var(--r-s);padding:12px 14px;color:var(--ink)}
+.x{position:absolute;top:18px;right:18px;border:1px solid var(--line);background:none;border-radius:99px;width:38px;height:38px;font-size:18px;line-height:1}
+.done{display:grid;gap:12px}
+.done h3{font-size:40px}
+.demo{font-size:12px;color:var(--muted)}
+
+/* ---------- colour on scroll: each section sets a tone ---------- */
+:root[data-tone="sand"]{--sheet:#E3D7C6;--paper:#EEE5D8;--frame:#C6B7A3}
+:root[data-tone="clay"]{--sheet:#D9C4AE;--paper:#E7D8C6;--frame:#BCA58C;--muted:#6E6155}
+:root[data-tone="dusk"]{--sheet:#26221D;--paper:#302B25;--frame:#17140F;--ink:#EEE7DC;--muted:#A69B8B;--line:rgba(238,231,220,.16)}
+html,body,.sheet,.tt,.note,.day,.price,.price.hl,.chip,.btn.ink,.row,.cls,.step,details,.person{transition:background-color .9s ease,color .9s ease,border-color .9s ease}
+
+/* ---------- mobile menu ---------- */
+.mnav{position:fixed;z-index:45;inset:0;background:var(--sheet);display:flex;flex-direction:column;justify-content:center;gap:6px;
+  padding:calc(env(safe-area-inset-top,0px) + 70px) max(24px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 40px) max(24px,env(safe-area-inset-left,0px))}
+.mnav a:not(.btn){font:200 clamp(48px,14vw,72px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none}
+.mnav .btn{align-self:flex-start;margin-top:28px}
+.mnav .x{top:calc(env(safe-area-inset-top,0px) + 18px);right:max(18px,env(safe-area-inset-right,0px))}
+.menu-btn{padding:9px 16px;font-size:11px;border-color:rgba(251,248,243,.45)}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .pill{display:none}
+  .menu-btn{display:inline-flex}
+  .nav{grid-template-columns:1fr auto}
+  .cls{grid-template-columns:70px 1fr auto;row-gap:10px}
+  .cls .tag,.cls .who{display:none}
+  .cls .spots{grid-column:2}
+  .cls .btn{grid-row:1/3;grid-column:3}
+  .team{grid-template-columns:1fr}
+  .team-photo{display:none}
+  .person{min-height:0;opacity:1;padding-block:28px;border-top:1px solid var(--line)}
+  .person .ph{display:block;aspect-ratio:4/5;border-radius:var(--r-m);max-width:420px}
+  .visit-grid,.price-grid{grid-template-columns:1fr 1fr}
+  .price{border-right:0;padding-left:0;border-bottom:1px solid var(--line)}
+  .price.hl{padding-left:20px}
+  .faq{grid-template-columns:1fr}
+  .foot-in{grid-template-columns:1fr}
+  .foot-btn{padding:20px}
+}
+@media (max-width:640px){
+  .hero{min-height:620px}
+  .hero .word{font-size:44vw;bottom:-.17em}
+  .foot .word{font-size:44vw}
+  .hero-top .gloss{display:none}
+  .hero-mid{bottom:calc(44vw*.46 + 14px)}
+  .ring{width:110%}.ring.l{left:-60%}.ring.r{right:-60%}
+  .rings b{display:none}
+  .studio .cap{grid-template-columns:1fr}
+  .strip .ph:nth-child(n+4){display:none}
+  .cards{grid-template-columns:1fr;gap:0;max-width:340px}
+  .c1,.c3{display:none}
+  .row{grid-template-columns:1fr 84px}
+  .row p{grid-column:1/-1;grid-row:2}
+  .row .ph{grid-row:1;grid-column:2}
+  .days{overflow-x:auto;grid-template-columns:repeat(7,74px)}
+  .visit-grid,.price-grid{grid-template-columns:1fr}
+  .statement .side{flex-direction:column;gap:6px;align-items:center}
+  .nav-r .btn:not(.menu-btn){display:none}
+  .hero .ph::before{background:linear-gradient(180deg,rgba(28,22,16,.45),rgba(28,22,16,.55) 55%,rgba(28,22,16,.35) 80%,rgba(28,22,16,.5))}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  .word span,.foot .word span,.row h3,.row p,.note p{transform:none!important;opacity:1!important}
+  .row::before{transform:none}.tick path{stroke-dashoffset:0}
+  .statement .w{opacity:1}
+}
+</style>
+
+<div class="sheet">
+  <!-- HERO -->
+  <header class="hero" id="top">
+    <div class="ph" data-l="photo 01 · studio"><img src="img/01-hero-poster.jpg" alt="Reformers in a sunlit canal house studio" fetchpriority="high"><video autoplay muted loop playsinline preload="auto" poster="img/01-hero-poster.jpg" aria-hidden="true"><source src="video/hero.webm" type="video/webm"><source src="video/hero.mp4" type="video/mp4"></video></div>
+    <div class="rings" aria-hidden="true"><span class="ring l"><i></i></span><span class="ring r"><i></i></span><b></b><b></b></div>
+    <nav class="nav" aria-label="Main">
+      <a class="mark" href="#top" aria-label="veer, back to top"><span>v</span><span>e</span><span>e</span><span>r</span></a>
+      <div class="pill">
+        <a href="#timetable" data-i="nav1">Timetable</a>
+        <a href="#visit" data-i="nav2">First visit</a>
+        <a href="#team" data-i="nav3">Teachers</a>
+        <a href="#prices" data-i="nav4">Prices</a>
+      </div>
+      <div class="nav-r">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" id="l-en" aria-pressed="true">EN</button>
+          <button type="button" id="l-nl" aria-pressed="false">NL</button>
+        </div>
+        <a class="btn solid" href="#timetable" data-i="book">Book a class</a>
+        <button type="button" class="btn menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mnav">Menu</button>
+      </div>
+    </nav>
+    <div class="hero-top">
+      <p class="lead" data-i="lead">Reformer pilates in Amsterdam Oost. Eight reformers, forty-five minutes, springs set for you.</p>
+      <p class="gloss"><em>veer</em> (nl)<br>1. spring<br>2. feather</p>
+    </div>
+    <div class="hero-mid">
+      <p data-i="calm">The calmest hour of your week.</p>
+      <a class="btn solid" href="#timetable" data-i="book2">See today's classes</a>
+      <span class="next" id="next"><i></i><span id="next-t">Next class</span></span>
+    </div>
+    <div class="word" aria-hidden="true"><span><i>v</i></span><span><i>e</i></span><span><i>e</i></span><span><i>r</i></span></div>
+  </header>
+
+  <!-- STATEMENT -->
+  <section class="statement wrap" aria-label="About VEER" data-tone="milk">
+    <p id="lit" data-i="statement">Veer means spring and feather. Our reformers run on springs, and you leave feeling lighter. Eight people, English or Dutch, no contract.</p>
+    <div class="side label muted"><span data-i="s1">Reformer only</span><span>52.36° N, 4.93° E</span><span data-i="s2">Amsterdam Oost</span></div>
+  </section>
+
+  <!-- THE STUDIO -->
+  <section class="studio wrap" aria-labelledby="st-h" data-tone="milk">
+    <h2 id="st-h" data-i="studio">The studio</h2>
+    <div class="strip" id="strip">
+      <div class="ph" data-l="12 · light"><img src="img/12-light.jpg" alt="Window light on a plaster wall"></div>
+      <div class="ph" data-l="02 · stillness"><img src="img/02-cinematic.jpg" alt="A woman sitting still on a reformer"></div>
+      <div class="ph" data-l="10 · springs"><img src="img/10-springs.jpg" alt="Reformer springs on pale oak"></div>
+      <div class="ph" data-l="11 · reception"><img src="img/11-reception.jpg" alt="Travertine reception counter with cups"></div>
+      <div class="ph" data-l="05 · footbar"><img src="img/05-feet.jpg" alt="Feet in grip socks on the footbar"></div>
+    </div>
+    <div class="cap">
+      <p class="label" data-i="cap1">A canal house room with eight oak reformers</p>
+      <p data-i="cap2">Tall windows, lime plaster, no mirrors on the walls. You hear the springs and the teacher, nothing else. Tea and a shower after class.</p>
+    </div>
+  </section>
+
+  <!-- ABOUT COLLAGE -->
+  <section class="about wrap" aria-label="House rules" data-tone="sand">
+    <div class="cards">
+      <div class="ph c1" data-l="06 · candid"><img src="img/06-candid.jpg" alt="A smiling woman sitting on the studio floor"></div>
+      <article class="note">
+        <span class="tape" aria-hidden="true"></span>
+        <h3 data-i="rules">House rules</h3>
+        <p><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8"/><path d="M5.2 9.4l2.5 2.4 5-5.4"/></svg><span data-i="r1">Phones sleep in the basket by the door. One hour without a screen is part of the class.</span></p>
+        <p><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8"/><path d="M5.2 9.4l2.5 2.4 5-5.4"/></svg><span data-i="r2">Grip socks on, shoes off. We keep spare pairs at the desk.</span></p>
+        <p><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8"/><path d="M5.2 9.4l2.5 2.4 5-5.4"/></svg><span data-i="r3">On your first visit, come ten minutes early. We show you the reformer before anyone else arrives.</span></p>
+        <p><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8"/><path d="M5.2 9.4l2.5 2.4 5-5.4"/></svg><span data-i="r4">Nobody watches you. Everyone is busy with their own springs.</span></p>
+        <span class="sign" data-i="sign">the veer teachers</span>
+      </article>
+      <div class="ph c3" data-l="03 · long line"><img src="img/03-long-line.jpg" alt="A long stretch on the reformer"></div>
+    </div>
+  </section>
+
+  <!-- ROWS -->
+  <section class="rows wrap" aria-label="Why VEER" data-tone="sand">
+    <div class="row">
+      <h3><span class="n">01</span><span class="t" data-i="p1h">Springs set<br>for you</span></h3>
+      <p data-i="p1">Your teacher sets the tension before class starts. You lie down and begin. No guessing which colour spring is which.</p>
+      <div class="ph" data-l="04"><img src="img/04-hands.jpg" alt="Hands holding reformer straps"></div>
+    </div>
+    <div class="row">
+      <h3><span class="n">02</span><span class="t" data-i="p2h">Eight reformers,<br>never more</span></h3>
+      <p data-i="p2">Small enough that every cue is meant for you. You see live spots on every class, and the waitlist books you in by itself when someone cancels.</p>
+      <div class="ph" data-l="10"><img src="img/10-springs.jpg" alt="Close-up of reformer springs"></div>
+    </div>
+    <div class="row">
+      <h3><span class="n">03</span><span class="t" data-i="p3h">Book direct,<br>keep it simple</span></h3>
+      <p data-i="p3">Found us on ClassPass or Urban Sports Club? Welcome. Book here and you get the intro price, first place on the waitlist and no contract.</p>
+      <div class="ph" data-l="11"><img src="img/11-reception.jpg" alt="The reception desk"></div>
+    </div>
+  </section>
+</div>
+
+<!-- TIMETABLE -->
+<section class="tt wrap" id="timetable" aria-labelledby="tt-h" data-tone="milk">
+  <div class="tt-head">
+    <h2 id="tt-h" data-i="tt">timetable</h2>
+    <p class="label muted" data-i="ttn">All classes 45 min · max 8 people</p>
+  </div>
+  <div class="days" role="tablist" id="days" aria-label="Day"></div>
+  <div class="filters" id="filters">
+    <button type="button" class="chip" data-f="lvl" data-v="all" aria-pressed="true" data-i="fAll">All levels</button>
+    <button type="button" class="chip" data-f="lvl" data-v="new" aria-pressed="false" data-i="fNew">New to reformer</button>
+    <button type="button" class="chip" data-f="lang" data-v="EN" aria-pressed="false" data-i="fEn">In English</button>
+    <button type="button" class="chip" data-f="lang" data-v="NL" aria-pressed="false" data-i="fNl">In Dutch</button>
+    <button type="button" class="chip" data-f="open" data-v="1" aria-pressed="false" data-i="fOpen">Spots left</button>
+  </div>
+  <div class="classes" id="classes" aria-live="polite"></div>
+</section>
+
+<div class="sheet">
+  <!-- TEACHERS -->
+  <section class="team wrap" id="team" aria-labelledby="tm-h" data-tone="dusk">
+    <div class="team-photo" aria-hidden="true">
+      <p class="label muted" id="tm-h" data-i="team" style="margin:0 0 14px">The teachers</p>
+      <div class="frame">
+        <div class="ph on" data-l="07"><img src="img/07-instructor-a.jpg" alt=""></div>
+        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" alt=""></div>
+        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" alt=""></div>
+      </div>
+    </div>
+    <div class="team-list">
+      <article class="person on" data-k="0">
+        <div class="ph" data-l="07"><img src="img/07-instructor-a.jpg" alt="Portrait of Noor"></div>
+        <span class="label muted" data-i="t1r">Founder · Foundations, Slow</span>
+        <h3>Noor<br>de Wit</h3>
+        <p data-i="t1">Teaches the first-visit classes. Calm voice, very precise cues, and she remembers how your back felt last week.</p>
+      </article>
+      <article class="person" data-k="1">
+        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" alt="Portrait of Daan"></div>
+        <span class="label muted" data-i="t2r">Strength, Flow · teaches in English</span>
+        <h3>Daan<br>Visser</h3>
+        <p data-i="t2">Former rower. His Strength class is slow and very hard. Popular with people who think pilates is easy.</p>
+      </article>
+      <article class="person" data-k="2">
+        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" alt="Portrait of Mieke"></div>
+        <span class="label muted" data-i="t3r">Slow, Flow · Dutch and English</span>
+        <h3>Mieke<br>Bos</h3>
+        <p data-i="t3">Twenty years of teaching. Her Sunday Slow class is the one people book four weeks ahead.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- FIRST VISIT -->
+  <section class="visit wrap" id="visit" aria-labelledby="v-h" data-tone="clay">
+    <h2 class="h2" id="v-h" data-i="visit">Never been on a reformer?</h2>
+    <div class="visit-grid">
+      <div class="step"><b>1</b><h4 data-i="v1h">Book Foundations</h4><p data-i="v1">A 45 minute class for first timers, every day. Tap "New to reformer" in the timetable.</p></div>
+      <div class="step"><b>2</b><h4 data-i="v2h">Come ten minutes early</h4><p data-i="v2">Your teacher shows you the carriage, the straps and the springs before the room fills.</p></div>
+      <div class="step"><b>3</b><h4 data-i="v3h">Bring grip socks</h4><p data-i="v3">Or borrow a pair from the desk. Wear anything you can move in.</p></div>
+      <div class="step"><b>4</b><h4 data-i="v4h">Tea, then decide</h4><p data-i="v4">After class we help you pick a pack that fits your week. No contract, ever.</p></div>
+    </div>
+  </section>
+
+  <!-- PRICES -->
+  <section class="prices wrap" id="prices" aria-labelledby="p-h" data-tone="milk">
+    <h2 class="h2" id="p-h" data-i="prices">Packs, not contracts</h2>
+    <div class="price-grid">
+      <div class="price hl"><span class="label" data-i="pr1l">Intro · first visit</span><span class="amt">€49</span><h4 data-i="pr1h">3 classes</h4><p data-i="pr1">Valid for three weeks. Only when you book direct.</p></div>
+      <div class="price"><span class="label muted" data-i="pr2l">Drop in</span><span class="amt">€30</span><h4 data-i="pr2h">1 class</h4><p data-i="pr2">Valid for one month.</p></div>
+      <div class="price"><span class="label muted" data-i="pr3l">Most booked</span><span class="amt">€260</span><h4 data-i="pr3h">10 classes</h4><p data-i="pr3">Valid for four months. Share it with a friend.</p></div>
+      <div class="price"><span class="label muted" data-i="pr4l">Every week</span><span class="amt">€199</span><h4 data-i="pr4h">8 classes a month</h4><p data-i="pr4">Pause or stop any month. No notice period.</p></div>
+    </div>
+    <div class="faq">
+      <p class="label muted" data-i="faq">Questions people ask at the desk</p>
+      <div>
+        <details><summary data-i="q1">Can I still book through ClassPass?</summary><p data-i="a1">Yes, a few spots per class. Booking here gets you the intro price and first place on the waitlist.</p></details>
+        <details><summary data-i="q2">What if the class is full?</summary><p data-i="a2">Join the waitlist. If someone cancels, you are booked in automatically and get an email. Free cancellation up to 8 hours before.</p></details>
+        <details><summary data-i="q3">Is it OK with back pain or after pregnancy?</summary><p data-i="a3">Tell your teacher before class. Foundations and Slow are the best start. For an injury, check with your physio first.</p></details>
+        <details><summary data-i="q4">Do classes run in English?</summary><p data-i="a4">Every class shows its language in the timetable. Most run in English, some in Dutch, all teachers speak both.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="foot">
+  <div class="ph" data-l="02"><img src="img/02-cinematic.jpg" alt=""></div>
+  <div class="foot-in">
+    <div><span class="label" data-i="fa">Studio</span><p>Amsterdam Oost<br data-i="fa2">5 min from Amstel station</p></div>
+    <div><span class="label" data-i="fh">Hours</span><p data-i="fh2">Mon to Fri 07:00 to 21:30<br>Sat and Sun 08:30 to 14:00</p></div>
+    <div><span class="label">Contact</span><p>hello@veer.studio<br>Instagram @veer.studio</p></div>
+    <a class="btn solid foot-btn" href="#timetable" data-i="book3">Book a class</a>
+  </div>
+  <div class="disc"><span>© 2026 VEER</span><span>Design and code by SVG studio</span></div>
+  <div class="word" aria-hidden="true"><span><i>v</i></span><span><i>e</i></span><span><i>e</i></span><span><i>r</i></span></div>
+</footer>
+
+<!-- MOBILE MENU -->
+<nav class="mnav" id="mnav" aria-label="Menu" hidden>
+  <button type="button" class="x" id="mnav-x" aria-label="Close menu">×</button>
+  <a href="#timetable" data-i="nav1">Timetable</a>
+  <a href="#visit" data-i="nav2">First visit</a>
+  <a href="#team" data-i="nav3">Teachers</a>
+  <a href="#prices" data-i="nav4">Prices</a>
+  <a class="btn ink" href="#timetable" data-i="book4">Book a class</a>
+</nav>
+
+<!-- BOOKING SHEET -->
+<div class="scrim" id="scrim"></div>
+<aside class="sheet-panel" id="panel" aria-hidden="true" aria-labelledby="bk-h" role="dialog">
+  <button type="button" class="x" id="x" aria-label="Close">×</button>
+  <div id="bk-form-wrap">
+    <span class="label muted" id="bk-kind" data-i="bk">Book a class</span>
+    <h3 id="bk-h">Flow</h3>
+    <dl class="sum" id="bk-sum"></dl>
+    <form id="bk-form" style="display:grid;gap:14px">
+      <div class="f"><label for="bk-name" data-i="fn">Name</label><input id="bk-name" required autocomplete="name" value="Sanne"></div>
+      <div class="f"><label for="bk-mail" data-i="fe">Email</label><input id="bk-mail" type="email" required autocomplete="email" value="sanne@example.com"></div>
+      <div class="f"><label for="bk-pack" data-i="fp">Pay with</label>
+        <select id="bk-pack"><option>Intro · 3 classes €49</option><option>Drop in €30</option><option>10 classes €260</option><option>My pack (6 left)</option></select></div>
+      <button class="btn ink" type="submit" id="bk-go" data-i="confirm">Confirm booking</button>
+      <p class="demo" data-i="demo">Demo booking. Nothing is sent or charged.</p>
+    </form>
+  </div>
+  <div class="done" id="bk-done" hidden>
+    <span class="label muted" data-i="ok">Done</span>
+    <h3 id="done-h">See you on the reformer.</h3>
+    <p id="done-p"></p>
+    <button class="btn" type="button" id="done-x" data-i="close">Close</button>
+  </div>
+</aside>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* images: hide placeholder labels once real photos load, drop broken ones */
+$$('.ph img').forEach(im=>{
+  const ok=()=>im.closest('.ph').classList.add('loaded');
+  if(im.complete&&im.naturalWidth)ok();
+  im.addEventListener('load',ok);
+  im.addEventListener('error',()=>im.remove());
+});
+requestAnimationFrame(()=>document.documentElement.classList.add('ready'));
+
+/* ---------- i18n (Dutch is a draft, needs a native check) ---------- */
+const NL={nav1:'Rooster',nav2:'Eerste les',nav3:'Docenten',nav4:'Prijzen',book:'Boek een les',book2:'Lessen van vandaag',book3:'Boek een les',
+lead:'Reformer pilates in Amsterdam Oost. Acht reformers, vijfenveertig minuten, de veren staan voor je klaar.',calm:'Het rustigste uur van je week.',
+statement:'Een veer draagt de reformer, en zo licht ga je ook naar huis. Acht mensen, Nederlands of Engels, geen contract.',
+s1:'Alleen reformer',s2:'Amsterdam Oost',studio:'De studio',cap1:'Een grachtenpandkamer met acht eiken reformers',
+cap2:'Hoge ramen, kalkstuc, geen spiegels aan de muur. Je hoort de veren en de docent, verder niets. Thee en een douche na de les.',
+rules:'Huisregels',r1:'Telefoons slapen in de mand bij de deur. Een uur zonder scherm hoort bij de les.',r2:'Gripsokken aan, schoenen uit. Reserveparen liggen bij de balie.',
+r3:'Kom bij je eerste les tien minuten eerder. We laten je de reformer zien voordat de rest er is.',r4:'Niemand kijkt naar je. Iedereen is bezig met zijn eigen veren.',sign:'de veer docenten',
+p1h:'Veren voor je<br>ingesteld',p1:'Je docent stelt de spanning in voor de les begint. Jij gaat liggen en begint. Geen gepuzzel met gekleurde veren.',
+p2h:'Acht reformers,<br>nooit meer',p2:'Klein genoeg dat elke aanwijzing voor jou is. Je ziet live de vrije plekken, en de wachtlijst boekt je vanzelf in als iemand afzegt.',
+p3h:'Direct boeken,<br>simpel houden',p3:'Via ClassPass of Urban Sports Club binnengekomen? Welkom. Boek hier en je krijgt de introprijs, voorrang op de wachtlijst en geen contract.',
+tt:'rooster',ttn:'Alle lessen 45 min · max 8 mensen',fAll:'Alle niveaus',fNew:'Nieuw op de reformer',fEn:'In het Engels',fNl:'In het Nederlands',fOpen:'Plek vrij',
+team:'De docenten',t1r:'Oprichter · Foundations, Slow',t1:'Geeft de lessen voor nieuwkomers. Rustige stem, hele precieze aanwijzingen, en ze weet nog hoe je rug vorige week voelde.',
+t2r:'Strength, Flow · geeft les in het Engels',t2:'Oud-roeier. Zijn Strength-les is langzaam en heel zwaar. Populair bij mensen die denken dat pilates makkelijk is.',
+t3r:'Slow, Flow · Nederlands en Engels',t3:'Twintig jaar lesgeven. Haar Slow-les op zondag wordt vier weken vooruit geboekt.',
+visit:'Nog nooit op een reformer gestaan?',v1h:'Boek Foundations',v1:'Een les van 45 minuten voor beginners, elke dag. Kies "Nieuw op de reformer" in het rooster.',
+v2h:'Kom tien minuten eerder',v2:'Je docent laat je de slede, de banden en de veren zien voordat de zaal vol is.',v3h:'Neem gripsokken mee',v3:'Of leen een paar bij de balie. Draag iets waarin je kunt bewegen.',
+v4h:'Thee, dan beslissen',v4:'Na de les helpen we je een pakket te kiezen dat bij je week past. Nooit een contract.',
+prices:'Pakketten, geen contracten',pr1l:'Intro · eerste bezoek',pr1h:'3 lessen',pr1:'Drie weken geldig. Alleen als je direct boekt.',pr2l:'Losse les',pr2h:'1 les',pr2:'Een maand geldig.',
+pr3l:'Meest geboekt',pr3h:'10 lessen',pr3:'Vier maanden geldig. Te delen met een vriend.',pr4l:'Elke week',pr4h:'8 lessen per maand',pr4:'Elke maand te pauzeren of te stoppen. Geen opzegtermijn.',
+faq:'Vragen die we aan de balie horen',q1:'Kan ik nog via ClassPass boeken?',a1:'Ja, een paar plekken per les. Hier boeken geeft je de introprijs en voorrang op de wachtlijst.',
+q2:'Wat als de les vol is?',a2:'Zet je op de wachtlijst. Zegt iemand af, dan word je automatisch ingeboekt en krijg je een mail. Gratis annuleren tot 8 uur van tevoren.',
+q3:'Kan het met rugklachten of na een zwangerschap?',a3:'Vertel het je docent voor de les. Foundations en Slow zijn de beste start. Bij een blessure eerst even met je fysio overleggen.',
+q4:'Zijn de lessen in het Engels?',a4:'Bij elke les staat de taal in het rooster. De meeste zijn in het Engels, sommige in het Nederlands, alle docenten spreken beide.',
+fa:'Studio',fh:'Open',fh2:'Ma t/m vr 07:00 tot 21:30<br>Za en zo 08:30 tot 14:00',
+bk:'Boek een les',book4:'Boek een les',fn:'Naam',fe:'E-mail',fp:'Betaal met',confirm:'Bevestig boeking',demo:'Demoboeking. Er wordt niets verstuurd of afgeschreven.',ok:'Klaar',close:'Sluiten'};
+const EN={};$$('[data-i]').forEach(e=>EN[e.dataset.i]=e.innerHTML);
+let lang='en';
+const T={en:{days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],book:'Book',wait:'Waitlist',left:n=>n?`${n} of 8 left`:'Full',none:'No classes match. Try another day or filter.',
+  next:(c,m)=>`Next class · ${c} in ${m}`,with:'with',when:'When',where:'Where',teacher:'Teacher',studio:'Studio Oost',wl:'Join the waitlist',wlNote:'If someone cancels, you are booked in automatically.',
+  doneB:'See you on the reformer.',doneW:'You are on the waitlist.',doneP:(c,d,t,e)=>`${c}, ${d} at ${t}. A confirmation would go to ${e}.`,doneWP:(c,d,t)=>`${c}, ${d} at ${t}. You are number 1. We book you in the moment a spot opens.`,today:'Today',
+  cls:{Foundations:'First timers welcome',Flow:'Full body, steady pace',Strength:'Slow and heavy springs',Slow:'Long stretches, deep breath'}},
+ nl:{days:['zo','ma','di','wo','do','vr','za'],book:'Boek',wait:'Wachtlijst',left:n=>n?`${n} van 8 vrij`:'Vol',none:'Geen lessen gevonden. Probeer een andere dag of filter.',
+  next:(c,m)=>`Volgende les · ${c} over ${m}`,with:'met',when:'Wanneer',where:'Waar',teacher:'Docent',studio:'Studio Oost',wl:'Op de wachtlijst',wlNote:'Zegt iemand af, dan word je automatisch ingeboekt.',
+  doneB:'Tot op de reformer.',doneW:'Je staat op de wachtlijst.',doneP:(c,d,t,e)=>`${c}, ${d} om ${t}. De bevestiging zou naar ${e} gaan.`,doneWP:(c,d,t)=>`${c}, ${d} om ${t}. Je bent nummer 1. We boeken je in zodra er een plek vrijkomt.`,today:'Vandaag',
+  cls:{Foundations:'Beginners welkom',Flow:'Hele lichaam, rustig tempo',Strength:'Langzaam, zware veren',Slow:'Lange stretches, diepe adem'}}};
+function setLang(l){lang=l;$('#l-en').setAttribute('aria-pressed',l==='en');$('#l-nl').setAttribute('aria-pressed',l==='nl');document.documentElement.lang=l;
+  $$('[data-i]').forEach(e=>{const k=e.dataset.i;const v=l==='nl'?NL[k]:EN[k];if(v!=null)e.innerHTML=v});
+  splitLit();renderDays();renderClasses();nextClass();try{localStorage.setItem('veer-lang',l)}catch(e){}}
+$('#l-en').onclick=()=>setLang('en');
+const mnav=$('#mnav');const mOpen=o=>{mnav.hidden=!o;$('#menu-btn').setAttribute('aria-expanded',o);document.body.style.overflow=o?'hidden':''};
+$('#menu-btn').onclick=()=>mOpen(true);$('#mnav-x').onclick=()=>mOpen(false);mnav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mOpen(false)));$('#l-nl').onclick=()=>setLang('nl');
+
+/* ---------- timetable data (example schedule) ---------- */
+const TEACH=['Noor','Daan','Mieke'];
+const SLOTS=[['07:00','Flow',1,'EN'],['08:15','Foundations',0,'EN'],['12:15','Strength',1,'EN'],['17:45','Flow',2,'NL'],['19:00','Foundations',0,'NL'],['20:15','Slow',2,'EN']];
+const WKND=[['09:00','Foundations',0,'EN'],['10:15','Flow',1,'EN'],['11:30','Slow',2,'NL'],['12:45','Strength',1,'EN']];
+function rnd(s){let x=Math.sin(s)*10000;return x-Math.floor(x)}
+const start=new Date();start.setHours(0,0,0,0);
+const week=[...Array(7)].map((_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);const wk=d.getDay()%6===0;
+  const list=(wk?WKND:SLOTS).map((s,j)=>{const seed=d.getDate()*31+j*7+d.getMonth();let taken=Math.floor(rnd(seed)*9);if(s[0]==='19:00'||s[1]==='Slow')taken=Math.max(taken,7);
+    return {time:s[0],name:s[1],teacher:TEACH[s[2]],lang:s[3],left:Math.max(0,8-taken),date:d}});return {d,list}});
+let sel=0;const F={lvl:'all',lang:null,open:false};
+function renderDays(){const t=T[lang];$('#days').innerHTML=week.map((w,i)=>`<button class="day" role="tab" type="button" id="day-${i}" aria-selected="${i===sel}"><b>${i===0?t.today:t.days[w.d.getDay()]}</b><span>${w.d.getDate()}</span></button>`).join('');
+  $$('.day').forEach((b,i)=>b.onclick=()=>{sel=i;renderDays();renderClasses()})}
+function past(c){if(sel)return false;const [h,m]=c.time.split(':').map(Number);const n=new Date();return h*60+m<=n.getHours()*60+n.getMinutes()}
+function renderClasses(){const t=T[lang];const L=week[sel].list.filter(c=>!past(c)&&(F.lvl==='all'||c.name==='Foundations')&&(!F.lang||c.lang===F.lang)&&(!F.open||c.left>0));
+  $('#classes').innerHTML=L.length?L.map((c,i)=>`<div class="cls${c.left?'':' full'}">
+    <span class="t">${c.time}</span>
+    <span class="n">${c.name}<small>${t.cls[c.name]}</small></span>
+    <span class="who muted">${t.with} ${c.teacher}</span>
+    <span class="tag">${c.lang}</span>
+    <span class="spots"><span class="bar">${[...Array(8)].map((_,k)=>`<i class="${k<8-c.left?'f':''}"></i>`).join('')}</span><span class="muted">${t.left(c.left)}</span></span>
+    <button class="btn" type="button" data-k="${week[sel].list.indexOf(c)}">${c.left?t.book:t.wait} ↗</button></div>`).join(''):`<p class="empty">${t.none}</p>`;
+  $$('.cls .btn').forEach(b=>b.onclick=()=>openSheet(week[sel].list[b.dataset.k]))}
+$$('#filters .chip').forEach(ch=>ch.onclick=()=>{const f=ch.dataset.f,v=ch.dataset.v;
+  if(f==='lvl'){F.lvl=v;$$('[data-f="lvl"]').forEach(c=>c.setAttribute('aria-pressed',c===ch))}
+  if(f==='lang'){F.lang=F.lang===v?null:v;$$('[data-f="lang"]').forEach(c=>c.setAttribute('aria-pressed',c.dataset.v===F.lang))}
+  if(f==='open'){F.open=!F.open;ch.setAttribute('aria-pressed',F.open)}
+  renderClasses()});
+function nextClass(){const t=T[lang];const n=new Date();const now=n.getHours()*60+n.getMinutes();
+  for(let i=0;i<week.length;i++)for(const c of week[i].list){const [h,m]=c.time.split(':').map(Number);const mins=i*1440+h*60+m-now;
+    if(mins>0){const s=mins>=1440?`${Math.round(mins/1440)}d`:mins>=60?`${Math.floor(mins/60)}h ${mins%60}m`:`${mins}m`;$('#next-t').textContent=t.next(c.name,s);return}}}
+setInterval(nextClass,30000);
+
+/* ---------- booking sheet ---------- */
+let cur=null;
+function openSheet(c){cur=c;const t=T[lang];$('#bk-form-wrap').hidden=false;$('#bk-done').hidden=true;
+  $('#bk-h').textContent=c.name;$('#bk-kind').textContent=c.left?(lang==='nl'?NL.bk:EN.bk):t.wl;
+  const dl=`${t.days[c.date.getDay()]} ${c.date.getDate()}/${c.date.getMonth()+1}`;
+  $('#bk-sum').innerHTML=`<dt>${t.when}</dt><dd>${dl}, ${c.time} · 45 min</dd><dt>${t.teacher}</dt><dd>${c.teacher} · ${c.lang}</dd><dt>${t.where}</dt><dd>${t.studio}</dd>${c.left?'':`<dt></dt><dd>${t.wlNote}</dd>`}`;
+  $('#bk-go').textContent=c.left?(lang==='nl'?NL.confirm:EN.confirm):t.wl;
+  $('#panel').classList.add('on');$('#scrim').classList.add('on');$('#panel').setAttribute('aria-hidden','false');setTimeout(()=>$('#bk-name').focus(),300)}
+function closeSheet(){$('#panel').classList.remove('on');$('#scrim').classList.remove('on');$('#panel').setAttribute('aria-hidden','true')}
+$('#x').onclick=closeSheet;$('#scrim').onclick=closeSheet;$('#done-x').onclick=closeSheet;
+addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+$('#bk-form').addEventListener('submit',e=>{e.preventDefault();const t=T[lang],c=cur;const dl=`${t.days[c.date.getDay()]} ${c.date.getDate()}/${c.date.getMonth()+1}`;
+  if(c.left){c.left--;$('#done-h').textContent=t.doneB;$('#done-p').textContent=t.doneP(c.name,dl,c.time,$('#bk-mail').value)}
+  else{$('#done-h').textContent=t.doneW;$('#done-p').textContent=t.doneWP(c.name,dl,c.time)}
+  $('#bk-form-wrap').hidden=true;$('#bk-done').hidden=false;renderClasses()});
+
+/* ---------- scroll-lit statement ---------- */
+function splitLit(){const p=$('#lit');p.innerHTML=p.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(' ');litUpdate()}
+function litUpdate(){const p=$('#lit');const r=p.getBoundingClientRect();const vh=innerHeight;
+  const prog=Math.min(1,Math.max(0,(vh*.85-r.top)/(r.height+vh*.35)));const ws=p.querySelectorAll('.w');const n=Math.round(prog*ws.length);
+  ws.forEach((w,i)=>w.classList.toggle('on',reduce||i<n))}
+addEventListener('scroll',litUpdate,{passive:true});
+
+/* ---------- teachers: sticky photo follows the name in view ---------- */
+const pics=$$('.team-photo .ph');
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const k=+e.target.dataset.k;
+  $$('.person').forEach(p=>p.classList.toggle('on',p===e.target));pics.forEach((p,i)=>p.classList.toggle('on',i===k))}}),{rootMargin:'-45% 0px -45% 0px'});
+$$('.person').forEach(p=>io.observe(p));
+
+/* ---------- smooth scroll + studio strip grows ---------- */
+if(!reduce&&window.Lenis){const lenis=new Lenis({lerp:.1});
+  if(window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);lenis.on('scroll',ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0)}
+  else{const raf=t=>{lenis.raf(t);requestAnimationFrame(raf)};requestAnimationFrame(raf)}
+  $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const el=document.querySelector(a.getAttribute('href'));if(el){e.preventDefault();lenis.scrollTo(el,{offset:-10})}}));}
+if(!reduce&&window.gsap&&window.ScrollTrigger){gsap.registerPlugin(ScrollTrigger);
+  gsap.fromTo('#strip .ph',{height:()=>innerWidth<640?110:Math.min(240,innerWidth*.15)},{height:()=>innerWidth<640?220:Math.min(520,innerWidth*.32),ease:'none',stagger:.04,
+    scrollTrigger:{trigger:'#strip',start:'top 85%',end:'bottom 30%',scrub:.6}});
+  gsap.to('.hero .ph img, .hero .ph video',{yPercent:8,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+  gsap.from('.c1',{rotate:-14,x:'-30%',scrollTrigger:{trigger:'.cards',start:'top 85%',end:'center 55%',scrub:.6}});
+  gsap.from('.c3',{rotate:13,x:'30%',scrollTrigger:{trigger:'.cards',start:'top 85%',end:'center 55%',scrub:.6}});
+}
+
+/* ---------- reveal rows, rules, footer word ---------- */
+const revIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revIO.unobserve(e.target)}}),{rootMargin:'0px 0px -18% 0px'});
+$$('.row, .note').forEach(el=>revIO.observe(el));
+const wordIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');wordIO.unobserve(e.target)}}),{threshold:.15});
+wordIO.observe($('.foot .word'));
+
+/* ---------- tone on scroll ---------- */
+const toneIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const t=e.target.dataset.tone;
+  if(t==='milk')delete document.documentElement.dataset.tone;else document.documentElement.dataset.tone=t}}),{rootMargin:'-50% 0px -50% 0px'});
+$$('[data-tone]').forEach(s=>toneIO.observe(s));
+
+let saved='en';try{saved=localStorage.getItem('veer-lang')||'en'}catch(e){}
+setLang(saved==='nl'?'nl':'en');
+})();
+</script>

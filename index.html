@@ -221,10 +221,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tring i::before{top:-4px;width:8px;height:8px;margin-left:-4px}
 .tring i::after{bottom:-2.5px;width:5px;height:5px;margin-left:-2.5px}
 .team-photo .frame{position:relative;z-index:1;aspect-ratio:4/5;border-radius:var(--r-m);overflow:hidden}
-.team-photo .ph{position:absolute;inset:0;z-index:1;clip-path:inset(100% 0 0 0);transition:clip-path 1.1s cubic-bezier(.7,0,.2,1)}
-.team-photo .ph img{transform:scale(1.12);transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
-.team-photo .ph.on{z-index:2;clip-path:inset(0 0 0 0)}
-.team-photo .ph.on img{transform:none}
+.team-photo .ph{position:absolute;inset:0;opacity:0;transition:opacity .9s ease}
+.team-photo .ph.on{opacity:1}
 .tmeta{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:20px}
 .tcount{font:200 clamp(28px,2.6vw,40px)/1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .tcount b{font-weight:300;display:inline-block;min-width:1.2em}

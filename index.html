@@ -168,12 +168,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .row p{transition-delay:.32s}
 .row.in h3,.row.in p{opacity:1;transform:none}
 .row h3 .n{display:block;font:400 11px var(--sans);letter-spacing:.1em;margin-bottom:12px;opacity:.55}
-.row .ph img{transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.row .ph img{transition:transform 1.6s cubic-bezier(.25,.6,.3,1)}
 @media (hover:hover) and (min-width:641px){
-  .row:hover{grid-template-columns:1.1fr 1fr 280px;padding-block:28px}
-  .row:hover .ph img{transform:scale(1.08)}
-  .row h3 span.t{display:inline-block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
-  .row:hover h3 span.t{transform:translateX(14px)}
+  .row:hover .ph img{transform:scale(1.04)}
+  .row h3 span.t{display:inline-block;transition:transform 1s cubic-bezier(.25,.6,.3,1)}
+  .row:hover h3 span.t{transform:translateX(6px)}
 }
 .row:last-child{border-bottom:1px solid var(--line)}
 .row h3{margin:0;font:500 clamp(20px,2vw,28px)/1.02 var(--sans);letter-spacing:-.02em;text-transform:uppercase}

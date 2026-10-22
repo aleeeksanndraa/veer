@@ -8,6 +8,13 @@
 <meta name="description" content="VEER, reformer pilates in Amsterdam Oost. Eight reformers, 45 minutes, English or Dutch.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231E1C19'/%3E%3Cpath d='M19 21l13 24 13-24' fill='none' stroke='%23F6F3EE' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#1E1C19">
+<meta property="og:type" content="website">
+<meta property="og:title" content="VEER Reformer Studio, Amsterdam Oost">
+<meta property="og:description" content="Reformer pilates in Amsterdam Oost. Eight reformers, 45 minutes, English or Dutch, no contract.">
+<meta property="og:image" content="https://aleeeksanndraa.github.io/veer/img/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://aleeeksanndraa.github.io/veer/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,200;0,300;0,400;1,200;1,300&family=Geist:wght@400;500;600&display=swap">
@@ -37,6 +44,8 @@ html{background:var(--frame)}
 body{background:var(--frame);color:var(--ink);font:400 15px/1.1 var(--sans);-webkit-font-smoothing:antialiased;
   padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-block:10px}
 img{max-width:100%;display:block}
+p{line-height:1.25}
+.note p{line-height:1.2}
 [hidden]{display:none!important}
 a{color:inherit}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -139,7 +148,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .note{position:relative;z-index:2;background:var(--paper);border-radius:var(--r-s)!important;padding:clamp(22px,3vw,38px);aspect-ratio:4/5.3;display:flex;flex-direction:column;gap:12px;transform:rotate(1deg);
   background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(30,28,25,.05) 27px 28px)}
 .note h3{margin:0 0 4px;font:300 italic clamp(26px,2.6vw,36px)/1 var(--display)}
-.note p{margin:0;font-size:13.5px;line-height:1.1}
+.note p{margin:0;font-size:13.5px}
 .note .sign{margin-top:auto;font:300 italic 20px var(--display);text-align:right}
 .cards .ph{z-index:1;transition:box-shadow .5s,z-index 0s .25s}
 .cards .ph img{transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
@@ -452,11 +461,11 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
   <section class="studio wrap" aria-labelledby="st-h" data-tone="milk">
     <h2 id="st-h" data-i="studio">The studio</h2>
     <div class="strip" id="strip">
-      <div class="ph" data-l="12 · light"><img src="img/12-light.jpg" alt="Window light on a plaster wall"></div>
-      <div class="ph" data-l="02 · stillness"><img src="img/02-cinematic.jpg" alt="A woman sitting still on a reformer"></div>
-      <div class="ph" data-l="10 · springs"><img src="img/10-springs.jpg" alt="Reformer springs on pale oak"></div>
-      <div class="ph" data-l="11 · reception"><img src="img/11-reception.jpg" alt="Travertine reception counter with cups"></div>
-      <div class="ph" data-l="05 · footbar"><img src="img/05-feet.jpg" alt="Feet in grip socks on the footbar"></div>
+      <div class="ph" data-l="12 · light"><img src="img/12-light.jpg" srcset="img/m/12-light.jpg 1100w, img/12-light.jpg 2000w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Window light on a plaster wall"></div>
+      <div class="ph" data-l="02 · stillness"><img src="img/02-cinematic.jpg" srcset="img/m/02-cinematic.jpg 1100w, img/02-cinematic.jpg 2000w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="A woman sitting still on a reformer"></div>
+      <div class="ph" data-l="10 · springs"><img src="img/10-springs.jpg" srcset="img/m/10-springs.jpg 1100w, img/10-springs.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Reformer springs on pale oak"></div>
+      <div class="ph" data-l="11 · reception"><img src="img/11-reception.jpg" srcset="img/m/11-reception.jpg 1100w, img/11-reception.jpg 1600w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Travertine reception counter with cups"></div>
+      <div class="ph" data-l="05 · footbar"><img src="img/05-feet.jpg" srcset="img/m/05-feet.jpg 1100w, img/05-feet.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Feet in grip socks on the footbar"></div>
     </div>
     <div class="cap">
       <p class="label" data-i="cap1">A canal house room with eight oak reformers</p>
@@ -467,7 +476,7 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
   <!-- ABOUT COLLAGE -->
   <section class="about wrap" aria-label="House rules" data-tone="sand">
     <div class="cards">
-      <div class="ph c1" data-l="06 · candid"><img src="img/06-candid.jpg" alt="A smiling woman sitting on the studio floor"></div>
+      <div class="ph c1" data-l="06 · candid"><img src="img/06-candid.jpg" srcset="img/m/06-candid.jpg 1100w, img/06-candid.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="A smiling woman sitting on the studio floor"></div>
       <article class="note">
         <span class="tape" aria-hidden="true"></span>
         <h3 data-i="rules">House rules</h3>
@@ -477,7 +486,7 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
         <p><svg class="tick" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8"/><path d="M5.2 9.4l2.5 2.4 5-5.4"/></svg><span data-i="r4">Nobody watches you. Everyone is busy with their own springs.</span></p>
         <span class="sign" data-i="sign">the veer teachers</span>
       </article>
-      <div class="ph c3" data-l="03 · long line"><img src="img/03-long-line.jpg" alt="A long stretch on the reformer"></div>
+      <div class="ph c3" data-l="03 · long line"><img src="img/03-long-line.jpg" srcset="img/m/03-long-line.jpg 1100w, img/03-long-line.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="A long stretch on the reformer"></div>
     </div>
   </section>
 
@@ -486,17 +495,17 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
     <div class="row">
       <h3><span class="n">01</span><span class="t" data-i="p1h">Springs set<br>for you</span></h3>
       <p data-i="p1">Your teacher sets the tension before class starts. You lie down and begin. No guessing which colour spring is which.</p>
-      <div class="ph" data-l="04"><img src="img/04-hands.jpg" alt="Hands holding reformer straps"></div>
+      <div class="ph" data-l="04"><img src="img/04-hands.jpg" loading="lazy" decoding="async" alt="Hands holding reformer straps"></div>
     </div>
     <div class="row">
       <h3><span class="n">02</span><span class="t" data-i="p2h">Eight reformers,<br>never more</span></h3>
       <p data-i="p2">Small enough that every cue is meant for you. You see live spots on every class, and the waitlist books you in by itself when someone cancels.</p>
-      <div class="ph" data-l="10"><img src="img/10-springs.jpg" alt="Close-up of reformer springs"></div>
+      <div class="ph" data-l="10"><img src="img/10-springs.jpg" srcset="img/m/10-springs.jpg 1100w, img/10-springs.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Close-up of reformer springs"></div>
     </div>
     <div class="row">
       <h3><span class="n">03</span><span class="t" data-i="p3h">Book direct,<br>keep it simple</span></h3>
       <p data-i="p3">Found us on ClassPass or Urban Sports Club? Welcome. Book here and you get the intro price, first place on the waitlist and no contract.</p>
-      <div class="ph" data-l="11"><img src="img/11-reception.jpg" alt="The reception desk"></div>
+      <div class="ph" data-l="11"><img src="img/11-reception.jpg" srcset="img/m/11-reception.jpg 1100w, img/11-reception.jpg 1600w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="The reception desk"></div>
     </div>
   </section>
 </div>
@@ -524,16 +533,16 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
     <div class="team-photo" aria-hidden="true">
       <p class="label muted" id="tm-h" data-i="team" style="margin:0 0 14px">The teachers</p>
       <div class="frame">
-        <div class="ph on" data-l="07"><img src="img/07-instructor-a.jpg" alt=""></div>
-        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" alt=""></div>
-        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" alt=""></div>
+        <div class="ph on" data-l="07"><img src="img/07-instructor-a.jpg" srcset="img/m/07-instructor-a.jpg 1100w, img/07-instructor-a.jpg 1600w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt=""></div>
+        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" srcset="img/m/08-instructor-b.jpg 1100w, img/08-instructor-b.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt=""></div>
+        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" srcset="img/m/09-instructor-c.jpg 1100w, img/09-instructor-c.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt=""></div>
       </div>
       <div class="tmeta"><span class="tcount"><b id="tnum">01</b><span> / 03</span></span><span class="tbar"><i class="on"></i><i></i><i></i></span></div>
     </div>
     <span class="tring tring-m" aria-hidden="true"><i></i><i></i></span>
     <div class="team-list">
       <article class="person on" data-k="0">
-        <div class="ph" data-l="07"><img src="img/07-instructor-a.jpg" alt="Portrait of Noor"></div>
+        <div class="ph" data-l="07"><img src="img/07-instructor-a.jpg" srcset="img/m/07-instructor-a.jpg 1100w, img/07-instructor-a.jpg 1600w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Portrait of Noor"></div>
         <span class="label muted" data-i="t1r">Founder · Foundations, Slow</span>
         <h3>Noor<br>de Wit</h3>
         <p data-i="t1">Teaches the first-visit classes. Calm voice, very precise cues, and she remembers how your back felt last week.</p>
@@ -541,7 +550,7 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
         <a class="with" href="#timetable"><span data-i="w1">Book with Noor</span></a>
       </article>
       <article class="person" data-k="1">
-        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" alt="Portrait of Daan"></div>
+        <div class="ph" data-l="08"><img src="img/08-instructor-b.jpg" srcset="img/m/08-instructor-b.jpg 1100w, img/08-instructor-b.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Portrait of Daan"></div>
         <span class="label muted" data-i="t2r">Strength, Flow · teaches in English</span>
         <h3>Daan<br>Visser</h3>
         <p data-i="t2">Former rower. His Strength class is slow and very hard. Popular with people who think pilates is easy.</p>
@@ -549,7 +558,7 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
         <a class="with" href="#timetable"><span data-i="w2">Book with Daan</span></a>
       </article>
       <article class="person" data-k="2">
-        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" alt="Portrait of Mieke"></div>
+        <div class="ph" data-l="09"><img src="img/09-instructor-c.jpg" srcset="img/m/09-instructor-c.jpg 1100w, img/09-instructor-c.jpg 1493w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt="Portrait of Mieke"></div>
         <span class="label muted" data-i="t3r">Slow, Flow · Dutch and English</span>
         <h3>Mieke<br>Bos</h3>
         <p data-i="t3">Twenty years of teaching. Her Sunday Slow class is the one people book four weeks ahead.</p>
@@ -606,7 +615,7 @@ html,body,.sheet,.tt,.note,.day,.prow,.feature,.chip,.btn.ink,.row,.cls,.step,de
 
 <!-- FOOTER -->
 <footer class="foot">
-  <div class="ph" data-l="02"><img src="img/02-cinematic.jpg" alt=""></div>
+  <div class="ph" data-l="02"><img src="img/02-cinematic.jpg" srcset="img/m/02-cinematic.jpg 1100w, img/02-cinematic.jpg 2000w" sizes="(max-width:640px) 92vw, 46vw" loading="lazy" decoding="async" alt=""></div>
   <div class="foot-in">
     <div><span class="label" data-i="fa">Studio</span><p>Amsterdam Oost<br data-i="fa2">5 min from Amstel station</p></div>
     <div><span class="label" data-i="fh">Hours</span><p data-i="fh2">Mon to Fri 07:00 to 21:30<br>Sat and Sun 08:30 to 14:00</p></div>
